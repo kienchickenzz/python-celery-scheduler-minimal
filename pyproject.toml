@@ -1,0 +1,16 @@
+[project]
+name = "etl-2"
+version = "0.1.0"
+description = ""
+requires-python = ">=3.12,<4.0"
+
+dependencies = [
+    "celery>=5.6.0",
+    "redis>=7.1.0",
+    "python-dotenv>=1.2.1",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pipdeptree==2.26.1", # Dependency visualization
+]

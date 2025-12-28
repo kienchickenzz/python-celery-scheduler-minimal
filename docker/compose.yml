@@ -1,0 +1,35 @@
+services:
+    redis:
+        hostname: "redis_message_queue"
+        container_name: "redis_message_queue"
+        image: "redis:7.0-alpine"
+        ports:
+        - "6379:6379"
+        networks:
+        - worker
+        volumes:
+        - ./volumes/redis:/data
+        environment:
+            REDIS_PASSWORD: ${REDIS_PASSWORD}
+        command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
+
+    flower:
+        image: mher/flower:latest
+        container_name: celery_flower
+        ports:
+        - "5555:5555"
+        environment:
+        - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+        - FLOWER_PORT=5555
+        - FLOWER_BASIC_AUTH=${FLOWER_BASIC_AUTH}
+        - FLOWER_URL_PREFIX=flower
+        - FLOWER_MAX_WORKERS=1000
+        depends_on:
+        - redis
+        networks:
+        - worker
+
+networks:
+    worker:
+        driver: bridge
+        name: worker_network
