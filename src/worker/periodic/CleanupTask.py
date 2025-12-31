@@ -1,10 +1,11 @@
 """
 Example Periodic Task: Cleanup old data
 """
-from typing import Dict, Any
 from datetime import datetime
 
 from src.shared.interface.IPeriodicTaskProcessor import IPeriodicTaskProcessor
+from src.shared.model.JobResult import JobResult
+from src.shared.enum.JobStatus import JobStatus
 
 
 class CleanupTask(IPeriodicTaskProcessor):
@@ -18,12 +19,12 @@ class CleanupTask(IPeriodicTaskProcessor):
         """Trả về tên task phải KHỚP với tên trong schedules.py"""
         return 'tasks.periodic.cleanup_old_data'
 
-    def execute(self) -> Dict[str, Any]:
+    def execute(self) -> dict:
         """
         Thực hiện cleanup logic
 
         Returns:
-            Dict: Kết quả cleanup
+            dict: Kết quả cleanup
         """
         print(f"[CleanupTask] 🧹 Starting cleanup at {datetime.now()}")
 
@@ -37,8 +38,8 @@ class CleanupTask(IPeriodicTaskProcessor):
 
         print(f"[CleanupTask] ✅ Cleanup completed. Deleted {deleted_count} records")
 
-        return {
-            'status': 'success',
-            'deleted_count': deleted_count,
-            'timestamp': datetime.now().isoformat(),
-        }
+        return JobResult(
+            status=JobStatus.SUCCESS,
+            result={'deleted_count': deleted_count},
+            error=None
+        ).to_dict()

@@ -1,10 +1,11 @@
 """
 Example Periodic Task: Generate Daily Report
 """
-from typing import Dict, Any
 from datetime import datetime
 
 from src.shared.interface.IPeriodicTaskProcessor import IPeriodicTaskProcessor
+from src.shared.model.JobResult import JobResult
+from src.shared.enum.JobStatus import JobStatus
 
 
 class DailyReportTask(IPeriodicTaskProcessor):
@@ -17,12 +18,12 @@ class DailyReportTask(IPeriodicTaskProcessor):
         """Tên task phải KHỚP với schedules.py"""
         return 'tasks.periodic.generate_daily_report'
 
-    def execute(self) -> Dict[str, Any]:
+    def execute(self) -> dict:
         """
         Tạo báo cáo hàng ngày
 
         Returns:
-            Dict: Kết quả tạo báo cáo
+            dict: Kết quả tạo báo cáo
         """
         print(f"[DailyReportTask] 📊 Generating daily report at {datetime.now()}")
 
@@ -36,8 +37,8 @@ class DailyReportTask(IPeriodicTaskProcessor):
 
         print(f"[DailyReportTask] ✅ Report generated with {report_items} items")
 
-        return {
-            'status': 'success',
-            'report_items': report_items,
-            'timestamp': datetime.now().isoformat(),
-        }
+        return JobResult(
+            status=JobStatus.SUCCESS,
+            result={'report_items': report_items},
+            error=None
+        ).to_dict()

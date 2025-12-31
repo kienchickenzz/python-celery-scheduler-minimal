@@ -22,10 +22,10 @@ def main():
     print("🔧 STARTING PERIODIC TASKS WORKER")
     print("="*60 + "\n")
 
-    # 1. Tạo Celery config (KHÔNG CẦN beat_schedule ở worker)
+    # 1. Tạo Celery config
     celery_config = CeleryConfig.from_config(
         config=config,
-        app_name='periodic_worker',  # ← Tên khác với beat
+        app_name='periodic_worker',
         worker_concurrency=4
     )
 
@@ -49,7 +49,6 @@ def main():
         periodic_tasks=periodic_tasks
     )
     registry.register_all()
-    registry.register_all()
 
     # 5. Hiển thị config
     redis_host = config.get_config('REDIS_HOST', 'localhost')
@@ -64,7 +63,7 @@ def main():
         print(f"    - {task.get_task_name()}")
     print("="*60 + "\n")
 
-    print("⏳ Worker running... Press Ctrl+C to stop\n")
+    print("⏳ Worker is starting...\n")
 
     # 6. Khởi động worker
     celery_app.worker_main(argv=[

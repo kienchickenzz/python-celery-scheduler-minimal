@@ -3,7 +3,6 @@ Interface cho Periodic Task
 Các periodic task cần implement interface này
 """
 from abc import ABC, abstractmethod
-from typing import Any, Dict
 
 
 class IPeriodicTaskProcessor(ABC):
@@ -27,7 +26,7 @@ class IPeriodicTaskProcessor(ABC):
 
     # TODO: Trả về dto JobResult cụ thể
     @abstractmethod
-    def execute(self) -> Dict[str, Any]:
+    def execute(self) -> dict:
         """
         Thực thi logic của periodic task
 

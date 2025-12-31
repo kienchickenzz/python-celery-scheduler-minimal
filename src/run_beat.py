@@ -1,7 +1,7 @@
 """
 Celery Beat Entry Point
 
-Khởi chạy Celery Beat scheduler để chạy periodic tasks
+Khởi chạy Celery Beat scheduler để lập lịch periodic tasks
 
 Usage:
     python -m src.run_beat
@@ -22,7 +22,7 @@ def main():
     # 1. Load schedule config
     beat_schedule = get_beat_schedule()
 
-    # 2. Load config từ environment với beat_schedule
+    # 2. Load config từ với schedule
     celery_config = CeleryConfig.from_config(
         config=config,
         app_name='celery_beat',

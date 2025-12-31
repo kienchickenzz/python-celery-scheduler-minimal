@@ -1,10 +1,11 @@
 """
 Example Periodic Task: Sync Data
 """
-from typing import Dict, Any
 from datetime import datetime
 
 from src.shared.interface.IPeriodicTaskProcessor import IPeriodicTaskProcessor
+from src.shared.model.JobResult import JobResult
+from src.shared.enum.JobStatus import JobStatus
 
 
 class SyncDataTask(IPeriodicTaskProcessor):
@@ -17,12 +18,12 @@ class SyncDataTask(IPeriodicTaskProcessor):
         """Tên task phải KHỚP với schedules.py"""
         return 'tasks.periodic.sync_data'
 
-    def execute(self) -> Dict[str, Any]:
+    def execute(self) -> dict:
         """
         Đồng bộ dữ liệu từ external source
 
         Returns:
-            Dict: Kết quả sync
+            dict: Kết quả sync
         """
         print(f"[SyncDataTask] 🔄 Starting data sync at {datetime.now()}")
 
@@ -36,8 +37,8 @@ class SyncDataTask(IPeriodicTaskProcessor):
 
         print(f"[SyncDataTask] ✅ Sync completed. Synced {synced_records} records")
 
-        return {
-            'status': 'success',
-            'synced_records': synced_records,
-            'timestamp': datetime.now().isoformat(),
-        }
+        return JobResult(
+            status=JobStatus.SUCCESS,
+            result={'synced_records': synced_records},
+            error=None
+        ).to_dict()
