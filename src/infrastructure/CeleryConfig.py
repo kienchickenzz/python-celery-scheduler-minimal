@@ -12,7 +12,7 @@ from typing import Any
 from src.config import Config
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True) # Không cho phép thay đổi thuộc tính sau khi khởi tạo
 class CeleryConfig:
     """Celery application configuration"""
 
