@@ -7,9 +7,9 @@ Sử dụng Celery schedule:
 """
 from celery.schedules import crontab, schedule
 
-from src.worker.periodic.CleanupTask import CleanupTask
-from src.worker.periodic.DailyReportTask import DailyReportTask
-from src.worker.periodic.SyncDataTask import SyncDataTask
+from src.worker.periodic_task.CleanupTask import CleanupTask
+from src.worker.periodic_task.DailyReportTask import DailyReportTask
+from src.worker.periodic_task.SyncDataTask import SyncDataTask
 
 # Định nghĩa các schedule
 PERIODIC_SCHEDULES = {

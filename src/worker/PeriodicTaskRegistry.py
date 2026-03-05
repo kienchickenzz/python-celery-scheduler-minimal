@@ -50,6 +50,7 @@ class PeriodicTaskRegistry:
         task_name = task.get_task_name()
 
         # Tạo Celery task function
+        # TODO: Mỗi task có thể cần 1 cấu hình retry khác nhau???
         @self._app.task(
             name=task_name,
             bind=True,
@@ -61,19 +62,20 @@ class PeriodicTaskRegistry:
             Celery task wrapper cho periodic task
 
             Returns:
-                dict: Kết quả thực thi
+                dict: Kết quả thực thi (serialized từ JobResult)
             """
             try:
                 print(f"\n{'='*60}")
                 print(f"[PeriodicTaskRegistry] Executing periodic task: {task_name}")
                 print(f"{'='*60}")
 
-                # Gọi task để thực thi
-                result = task.execute()
+                # Gọi task để thực thi, nhận về JobResult
+                job_result = task.execute()
 
                 print(f"[PeriodicTaskRegistry] Periodic task completed: {task_name}")
 
-                return result
+                # Convert JobResult thành dict để Celery serialize
+                return job_result.to_dict()
 
             except Exception as e:
                 print(f"[PeriodicTaskRegistry] Periodic task error: {str(e)}")

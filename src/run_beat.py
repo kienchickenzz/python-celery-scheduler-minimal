@@ -6,9 +6,14 @@ Khởi chạy Celery Beat scheduler để lập lịch periodic tasks
 Usage:
     python -m src.run_beat
 """
-from src.config import config
+from os import environ
+
+from dotenv import load_dotenv
+
+from src.config import Config
+
 from src.infrastructure.CeleryConfig import CeleryConfig
-from src.worker.factories.CeleryAppFactory import CeleryAppFactory
+from src.worker.CeleryAppFactory import CeleryAppFactory
 from src.infrastructure.schedules import get_beat_schedule
 
 
@@ -18,6 +23,10 @@ def main():
     print("\n" + "="*60)
     print("⏰ STARTING CELERY BEAT SCHEDULER")
     print("="*60 + "\n")
+
+    # 0. Load env và config
+    load_dotenv('.env')
+    config = Config(environ)
 
     # 1. Load schedule config
     beat_schedule = get_beat_schedule()

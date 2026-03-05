@@ -19,12 +19,12 @@ class CleanupTask(IPeriodicTaskProcessor):
         """Trả về tên task phải KHỚP với tên trong schedules.py"""
         return 'tasks.periodic.cleanup_old_data'
 
-    def execute(self) -> dict:
+    def execute(self) -> JobResult:
         """
         Thực hiện cleanup logic
 
         Returns:
-            dict: Kết quả cleanup
+            JobResult: Kết quả cleanup
         """
         print(f"[CleanupTask] 🧹 Starting cleanup at {datetime.now()}")
 
@@ -42,4 +42,4 @@ class CleanupTask(IPeriodicTaskProcessor):
             status=JobStatus.SUCCESS,
             result={'deleted_count': deleted_count},
             error=None
-        ).to_dict()
+        )

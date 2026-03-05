@@ -18,12 +18,12 @@ class DailyReportTask(IPeriodicTaskProcessor):
         """Tên task phải KHỚP với schedules.py"""
         return 'tasks.periodic.generate_daily_report'
 
-    def execute(self) -> dict:
+    def execute(self) -> JobResult:
         """
         Tạo báo cáo hàng ngày
 
         Returns:
-            dict: Kết quả tạo báo cáo
+            JobResult: Kết quả tạo báo cáo
         """
         print(f"[DailyReportTask] 📊 Generating daily report at {datetime.now()}")
 
@@ -41,4 +41,4 @@ class DailyReportTask(IPeriodicTaskProcessor):
             status=JobStatus.SUCCESS,
             result={'report_items': report_items},
             error=None
-        ).to_dict()
+        )

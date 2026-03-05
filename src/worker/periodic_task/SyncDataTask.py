@@ -18,12 +18,12 @@ class SyncDataTask(IPeriodicTaskProcessor):
         """Tên task phải KHỚP với schedules.py"""
         return 'tasks.periodic.sync_data'
 
-    def execute(self) -> dict:
+    def execute(self) -> JobResult:
         """
         Đồng bộ dữ liệu từ external source
 
         Returns:
-            dict: Kết quả sync
+            JobResult: Kết quả sync
         """
         print(f"[SyncDataTask] 🔄 Starting data sync at {datetime.now()}")
 
@@ -41,4 +41,4 @@ class SyncDataTask(IPeriodicTaskProcessor):
             status=JobStatus.SUCCESS,
             result={'synced_records': synced_records},
             error=None
-        ).to_dict()
+        )

@@ -4,6 +4,8 @@ Các periodic task cần implement interface này
 """
 from abc import ABC, abstractmethod
 
+from src.shared.model.JobResult import JobResult
+
 
 class IPeriodicTaskProcessor(ABC):
     """
@@ -24,13 +26,12 @@ class IPeriodicTaskProcessor(ABC):
         """
         return '' # Override trong class con
 
-    # TODO: Trả về dto JobResult cụ thể
     @abstractmethod
-    def execute(self) -> dict:
+    def execute(self) -> JobResult:
         """
         Thực thi logic của periodic task
 
         Returns:
-            Dict[str, Any]: Kết quả thực thi
+            JobResult: Kết quả thực thi với status, result, error
         """
         pass

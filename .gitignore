@@ -17,3 +17,6 @@ uv.lock
 
 # Celery 
 **/celerybeat-schedule
+
+# AI
+CLAUDE.md

@@ -6,21 +6,30 @@ Khởi chạy Celery worker để xử lý periodic tasks
 Usage:
     python -m src.run_periodic_worker
 """
-from src.config import config
+from os import environ
+
+from dotenv import load_dotenv
+
+from src.config import Config
+
 from src.infrastructure.CeleryConfig import CeleryConfig
-from src.worker.factories.CeleryAppFactory import CeleryAppFactory
-from src.worker.registry.PeriodicTaskRegistry import PeriodicTaskRegistry
+from src.worker.CeleryAppFactory import CeleryAppFactory
+from src.worker.PeriodicTaskRegistry import PeriodicTaskRegistry
 
 # Import periodic tasks
-from src.worker.periodic.CleanupTask import CleanupTask
-from src.worker.periodic.DailyReportTask import DailyReportTask
-from src.worker.periodic.SyncDataTask import SyncDataTask
+from src.worker.periodic_task.CleanupTask import CleanupTask
+from src.worker.periodic_task.DailyReportTask import DailyReportTask
+from src.worker.periodic_task.SyncDataTask import SyncDataTask
 
 
 def main():
     print("\n" + "="*60)
     print("🔧 STARTING PERIODIC TASKS WORKER")
     print("="*60 + "\n")
+
+    # 0. Load env và config
+    load_dotenv('.env')
+    config = Config(environ)
 
     # 1. Tạo Celery config
     celery_config = CeleryConfig.from_config(
