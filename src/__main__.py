@@ -1,3 +1,10 @@
+"""
+Entry point cho Periodic Task Service
+
+Usage:
+    uv run python -m src --worker   # Chạy Celery Worker
+    uv run python -m src --beat     # Chạy Celery Beat Scheduler
+"""
 import argparse
 
 
@@ -11,17 +18,15 @@ if __name__ == '__main__':
     group = parser.add_mutually_exclusive_group()
 
     # Run Mode
-    group.add_argument("--worker", action = "store_true", help = "Run periodic worker")
-    group.add_argument("--beat", action = "store_true", help = "Run Celery Beat scheduler")
+    group.add_argument("--worker", action="store_true", help="Run periodic worker")
+    group.add_argument("--beat", action="store_true", help="Run Celery Beat scheduler")
 
     options = parser.parse_args()
 
     if options.beat:
         from src.run_beat import main as start_beat_main
-        print("Starting Celery Beat scheduler...")
         start_beat_main()
     else:
         from src.run_periodic_worker import main as start_worker_main
-        print("Starting Periodic Tasks Worker...")
         start_worker_main()
         

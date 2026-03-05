@@ -1,11 +1,15 @@
 """
 Example Periodic Task: Cleanup old data
 """
+import logging
 from datetime import datetime
 
 from src.shared.interface.IPeriodicTaskProcessor import IPeriodicTaskProcessor
 from src.shared.model.JobResult import JobResult
 from src.shared.enum.JobStatus import JobStatus
+
+
+logger = logging.getLogger("app")
 
 
 class CleanupTask(IPeriodicTaskProcessor):
@@ -26,7 +30,7 @@ class CleanupTask(IPeriodicTaskProcessor):
         Returns:
             JobResult: Kết quả cleanup
         """
-        print(f"[CleanupTask] 🧹 Starting cleanup at {datetime.now()}")
+        logger.info(f"Starting cleanup at {datetime.now()}")
 
         # Implement cleanup logic
         # Ví dụ:
@@ -36,7 +40,7 @@ class CleanupTask(IPeriodicTaskProcessor):
 
         deleted_count = 42  # Example số lượng đã xóa
 
-        print(f"[CleanupTask] ✅ Cleanup completed. Deleted {deleted_count} records")
+        logger.info(f"Cleanup completed. Deleted {deleted_count} records")
 
         return JobResult(
             status=JobStatus.SUCCESS,

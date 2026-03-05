@@ -7,10 +7,13 @@ Usage:
     python -m src.run_periodic_worker
 """
 from os import environ
+from pathlib import Path
 
 from dotenv import load_dotenv
 
 from src.config import Config
+from src.logger.LoggerConfig import LoggerConfig
+from src.logger.LoggerFactory import LoggerFactory
 
 from src.infrastructure.CeleryConfig import CeleryConfig
 from src.worker.CeleryAppFactory import CeleryAppFactory
@@ -23,13 +26,17 @@ from src.worker.periodic_task.SyncDataTask import SyncDataTask
 
 
 def main():
-    print("\n" + "="*60)
-    print("🔧 STARTING PERIODIC TASKS WORKER")
-    print("="*60 + "\n")
-
     # 0. Load env và config
     load_dotenv('.env')
     config = Config(environ)
+
+    # 0.1 Khởi tạo logger
+    logger_config = LoggerConfig(project_root=Path(__file__).parent.parent)
+    logger = LoggerFactory(logger_config).get_instance()
+
+    logger.info("=" * 60)
+    logger.info("STARTING PERIODIC TASKS WORKER")
+    logger.info("=" * 60)
 
     # 1. Tạo Celery config
     celery_config = CeleryConfig.from_config(
@@ -63,16 +70,16 @@ def main():
     redis_host = config.get_config('REDIS_HOST', 'localhost')
     redis_port = config.get_int('REDIS_PORT', 6379)
 
-    print("\n" + "="*60)
-    print("⚙️   WORKER CONFIGURATION")
-    print("="*60)
-    print(f"  Redis: {redis_host}:{redis_port}")
-    print(f"  Registered Tasks: {len(periodic_tasks)}")
+    logger.info("=" * 60)
+    logger.info("WORKER CONFIGURATION")
+    logger.info("=" * 60)
+    logger.info(f"Redis: {redis_host}:{redis_port}")
+    logger.info(f"Registered Tasks: {len(periodic_tasks)}")
     for name, task in periodic_tasks.items():
-        print(f"    - {task.get_task_name()}")
-    print("="*60 + "\n")
+        logger.debug(f"  - {task.get_task_name()}")
+    logger.info("=" * 60)
 
-    print("⏳ Worker is starting...\n")
+    logger.info("Worker is starting...")
 
     # 6. Khởi động worker
     celery_app.worker_main(argv=[

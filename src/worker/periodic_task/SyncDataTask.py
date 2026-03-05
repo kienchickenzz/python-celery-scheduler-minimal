@@ -1,11 +1,15 @@
 """
 Example Periodic Task: Sync Data
 """
+import logging
 from datetime import datetime
 
 from src.shared.interface.IPeriodicTaskProcessor import IPeriodicTaskProcessor
 from src.shared.model.JobResult import JobResult
 from src.shared.enum.JobStatus import JobStatus
+
+
+logger = logging.getLogger("app")
 
 
 class SyncDataTask(IPeriodicTaskProcessor):
@@ -25,7 +29,7 @@ class SyncDataTask(IPeriodicTaskProcessor):
         Returns:
             JobResult: Kết quả sync
         """
-        print(f"[SyncDataTask] 🔄 Starting data sync at {datetime.now()}")
+        logger.info(f"Starting data sync at {datetime.now()}")
 
         # Implement sync logic
         # Ví dụ:
@@ -35,7 +39,7 @@ class SyncDataTask(IPeriodicTaskProcessor):
 
         synced_records = 250  # Example
 
-        print(f"[SyncDataTask] ✅ Sync completed. Synced {synced_records} records")
+        logger.info(f"Sync completed. Synced {synced_records} records")
 
         return JobResult(
             status=JobStatus.SUCCESS,

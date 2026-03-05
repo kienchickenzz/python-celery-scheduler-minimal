@@ -1,11 +1,15 @@
 """
 Example Periodic Task: Generate Daily Report
 """
+import logging
 from datetime import datetime
 
 from src.shared.interface.IPeriodicTaskProcessor import IPeriodicTaskProcessor
 from src.shared.model.JobResult import JobResult
 from src.shared.enum.JobStatus import JobStatus
+
+
+logger = logging.getLogger("app")
 
 
 class DailyReportTask(IPeriodicTaskProcessor):
@@ -25,7 +29,7 @@ class DailyReportTask(IPeriodicTaskProcessor):
         Returns:
             JobResult: Kết quả tạo báo cáo
         """
-        print(f"[DailyReportTask] 📊 Generating daily report at {datetime.now()}")
+        logger.info(f"Generating daily report at {datetime.now()}")
 
         # Implement report generation
         # Ví dụ:
@@ -35,7 +39,7 @@ class DailyReportTask(IPeriodicTaskProcessor):
 
         report_items = 100  # Example
 
-        print(f"[DailyReportTask] ✅ Report generated with {report_items} items")
+        logger.info(f"Report generated with {report_items} items")
 
         return JobResult(
             status=JobStatus.SUCCESS,

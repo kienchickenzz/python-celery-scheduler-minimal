@@ -7,9 +7,14 @@ DI Dependencies:
 - celery_app: Celery
 - periodic_tasks: Dict[str, IPeriodicTask]
 """
+import logging
+
 from celery import Celery
 
 from src.shared.interface.IPeriodicTaskProcessor import IPeriodicTaskProcessor
+
+
+logger = logging.getLogger("app")
 
 
 class PeriodicTaskRegistry:
@@ -32,12 +37,12 @@ class PeriodicTaskRegistry:
 
     def register_all(self):
         """Đăng ký tất cả periodic tasks với Celery"""
-        print(f"[PeriodicTaskRegistry] Registering {len(self._periodic_tasks)} periodic tasks...")
+        logger.info(f"Registering {len(self._periodic_tasks)} periodic tasks...")
 
         for name, task in self._periodic_tasks.items():
             self._register_task(name, task)
 
-        print(f"[PeriodicTaskRegistry] All periodic tasks registered")
+        logger.info("All periodic tasks registered")
 
     def _register_task(self, name: str, task: IPeriodicTaskProcessor):
         """
@@ -65,21 +70,21 @@ class PeriodicTaskRegistry:
                 dict: Kết quả thực thi (serialized từ JobResult)
             """
             try:
-                print(f"\n{'='*60}")
-                print(f"[PeriodicTaskRegistry] Executing periodic task: {task_name}")
-                print(f"{'='*60}")
+                logger.info("=" * 60)
+                logger.info(f"Executing periodic task: {task_name}")
+                logger.info("=" * 60)
 
                 # Gọi task để thực thi, nhận về JobResult
                 job_result = task.execute()
 
-                print(f"[PeriodicTaskRegistry] Periodic task completed: {task_name}")
+                logger.info(f"Periodic task completed: {task_name}")
 
                 # Convert JobResult thành dict để Celery serialize
                 return job_result.to_dict()
 
             except Exception as e:
-                print(f"[PeriodicTaskRegistry] Periodic task error: {str(e)}")
-                print(f"[PeriodicTaskRegistry] Retry count: {self.request.retries}/{self.max_retries}")
+                logger.error(f"Periodic task error: {str(e)}")
+                logger.warning(f"Retry count: {self.request.retries}/{self.max_retries}")
                 raise
 
-        print(f"[PeriodicTaskRegistry] Registered periodic task '{name}' with task name '{task_name}'")
+        logger.debug(f"Registered periodic task '{name}' with task name '{task_name}'")
